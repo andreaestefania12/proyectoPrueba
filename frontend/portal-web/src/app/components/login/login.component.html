@@ -1,0 +1,32 @@
+<div class="login-container">
+    <mat-card class="login-card">
+      <mat-card-title>Iniciar sesión</mat-card-title>
+  
+      <form (ngSubmit)="onLogin()" #usuarioForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuario</mat-label>
+          <input matInput [(ngModel)]="usuario.username"
+        name="username" #username="ngModel" required>
+        <mat-error *ngIf="username.invalid && username.touched">
+          El usuario es obligatorio.
+        </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">  
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" [(ngModel)]="usuario.password"
+          name="password" #password="ngModel" required>
+          <mat-error *ngIf="password.invalid && password.touched">
+            La contraseña es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <p *ngIf="loginError" class="error">{{ loginError }}</p>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="usuarioForm.invalid">Login</button>
+      </form>
+
+      <button mat-flat-button color="primary" (click)="onRegister()">Registrarse</button>
+    </mat-card>
+  
+  </div>

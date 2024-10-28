@@ -1,0 +1,24 @@
+<mat-sidenav-container class="sidenav-container" >
+  <mat-sidenav mode="side" class="custom-sidenav">
+    <h3>Categorias</h3>
+    <mat-nav-list>
+      <mat-list-item routerLink="/dashboard/productos" routerLinkActive="active" >Productos</mat-list-item>
+      <mat-list-item >Ordenes</mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content> 
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="toggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Menu</span>
+    </mat-toolbar>
+    
+    <div class="content">
+      <router-outlet></router-outlet>  
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

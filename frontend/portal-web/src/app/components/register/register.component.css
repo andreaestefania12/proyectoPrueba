@@ -1,0 +1,46 @@
+/* Container for centering the login form */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f3f4f6; 
+}
+.register-card {
+    width: 350px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 15px;
+}
+  
+button {
+    margin-top: 10px;
+    width: 100%;
+}
+  
+.error {
+    color: red;
+}
+mat-card-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+  
+mat-form-field {
+    margin-bottom: 15px;
+}
+
+@media (max-width: 400px) {
+    .login-card {
+      width: 100%;
+      padding: 15px;
+    }
+  }
+  

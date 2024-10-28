@@ -1,0 +1,41 @@
+<div class="register-container">
+    <mat-card class="register-card">
+      <mat-card-title>Registrarse</mat-card-title>
+  
+      <form (ngSubmit)="onRegister()" #usuarioForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Correo</mat-label>
+            <input matInput [(ngModel)]="usuario.email"
+          name="email" #email="ngModel" required>
+          <mat-error *ngIf="email.invalid && email.touched">
+            El correo es obligatorio.
+          </mat-error>
+          </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuario</mat-label>
+          <input matInput [(ngModel)]="usuario.username"
+        name="username" #username="ngModel" required>
+        <mat-error *ngIf="username.invalid && username.touched">
+          El nombre de usuario es obligatorio.
+        </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">  
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" [(ngModel)]="usuario.password"
+          name="password" #password="ngModel" required="">
+          <mat-error *ngIf="password.invalid && password.touched">
+            La contraseña es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <p *ngIf="registerError" class="error">{{ registerError }}</p>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="usuarioForm.invalid">Registrarse</button>
+      </form>
+
+      <button mat-flat-button color="primary" (click)="onLogin()">Iniciar sesión</button>
+    </mat-card>
+  
+</div>
