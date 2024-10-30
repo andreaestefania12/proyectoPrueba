@@ -1,5 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of, tap } from 'rxjs';
 import { Usuario } from 'src/app/models/user';
 
@@ -9,8 +10,8 @@ import { Usuario } from 'src/app/models/user';
 export class LoginService {
 
   private apiUrl = "http://localhost:5004/";
-
-  constructor(private http: HttpClient) { }
+  
+  constructor(private http: HttpClient, private router: Router) { }
 
   // Función para enviar la solicitud post de login
   public login(user: Usuario): Observable<HttpResponse<any>> {
@@ -19,9 +20,9 @@ export class LoginService {
     .pipe(
       tap((response: HttpResponse<any>) => {
         // generamos un token en el caso de que sea exitoso
-        if (response.body && response.body.token) {
+        if (response.status === 200) {
           const generatedToken = (Math.random() * (1000 - 0)).toString(); 
-          localStorage.setItem('authToken',generatedToken);  
+          localStorage.setItem('authToken',generatedToken); 
         }
       })
     );

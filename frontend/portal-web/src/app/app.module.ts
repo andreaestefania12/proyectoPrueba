@@ -11,7 +11,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProductComponent } from './components/product/product.component';
 import { RouterModule } from '@angular/router';
-
+import { TableComponent } from './components/shared/table/table.component';
+import { OrderComponent } from './components/order/order.component';
+import { DialogComponent } from './components/shared/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +29,10 @@ import { RouterModule } from '@angular/router';
     RegisterComponent,
     DashboardComponent,
     RouterModule,
-    ProductComponent
-
+    ProductComponent,
+    TableComponent,
+    OrderComponent,
+    DialogComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -11,13 +11,28 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://myappaks:josecruz06@db:543
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# Modelo de Producto
+class Product(db.Model):
+    __tablename__ = 'products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.String(200), nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
+    
 # Modelo de Orden
 class Order(db.Model):
+    __tablename__ = 'orders'
+
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id') ,nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(50), nullable=False, default='pending')
+    status = db.Column(db.String(50), nullable=False, default='Pendiente')
+
+    product = db.relationship('Product', backref= 'orders')
+
 
 # Ruta para obtener todas las órdenes
 @app.route('/orders', methods=['GET'])
@@ -26,6 +41,7 @@ def get_orders():
     return jsonify([{
         "id": order.id,
         "product_id": order.product_id,
+        "product_name": order.product.name,
         "quantity": order.quantity,
         "total_price": order.total_price,
         "status": order.status
@@ -38,6 +54,7 @@ def get_order(id):
     return jsonify({
         "id": order.id,
         "product_id": order.product_id,
+        "product_name": order.product.name,
         "quantity": order.quantity,
         "total_price": order.total_price,
         "status": order.status
@@ -51,7 +68,7 @@ def add_order():
         product_id=data['product_id'],
         quantity=data['quantity'],
         total_price=data['total_price'],
-        status='pending'  # Status inicial de la orden
+        status='Pendiente'  # Status inicial de la orden
     )
     db.session.add(new_order)
     db.session.commit()

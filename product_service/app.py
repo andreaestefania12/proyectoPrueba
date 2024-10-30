@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuración de la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://myappaks:josecruz06@db:5432/productdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://myappaks:josecruz06@db:5432/authdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -20,6 +20,17 @@ class Product(db.Model):
     description = db.Column(db.String(200), nullable=True)
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id') ,nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='Pendiente')
+
+    product = db.relationship('Product', backref= 'orders')
 
 # Ruta para obtener todos los productos
 @app.route('/products', methods=['GET'])
@@ -77,9 +88,17 @@ def update_product(id):
 @app.route('/products/<int:id>', methods=['DELETE'])
 def delete_product(id):
     product = Product.query.get_or_404(id)
+
+    # validamos si existe el producto en alguna orden
+    ordersProductos = Order.query.filter_by(product_id=id).first()
+    # Si existe una referencia no podemos eliminar
+    if ordersProductos:
+        return jsonify({"message": "No se puede eliminar el producto ya que existe en una o varias ordenes"}), 409
+
+    # si no existe, procedemos a eliminar  
     db.session.delete(product)
     db.session.commit()
-    return jsonify({"message": "Producto eliminado exitosamente"})
+    return jsonify({"message": "Producto eliminado exitosamente"}), 200
 
 # Ruta de verificación de salud
 @app.route('/health', methods=['GET'])

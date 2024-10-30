@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material-module/material.module';
@@ -18,7 +18,7 @@ import { LoginService } from 'src/app/services/login/login.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
   //Variable para mostrar si existe un error en el login
   public loginError: string = '';
@@ -34,21 +34,21 @@ export class LoginComponent {
       password: ''
     };
   }
+  ngOnInit(): void {
+    if(this.loginService.isLoggedIn()){
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   // Funcion para llamar el service de login enviando los parametros user y password
   public onLogin(): void {
     this.loginService.login(this.usuario).subscribe({
-      next: (response) => {
-        if(response.status === 200){
-          console.log('Login successful:', response);
-        }
-      },
       error: (error: HttpErrorResponse) => {
         this.loginError =  error.error.message;
       },
       complete: () => {
+        this.router.navigate(['/dashboard']);
         this.loginError = '';
-        console.log('Login process completed');
       }
     });
     

@@ -131,3 +131,9 @@ dist
 
 # venv
 venv/
+
+.vscode
+
+/frontend/portal-web/node_modules
+
+/frontend/portal-web/.angular

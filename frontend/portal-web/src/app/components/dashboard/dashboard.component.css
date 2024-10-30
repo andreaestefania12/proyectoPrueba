@@ -1,30 +1,17 @@
-.sidenav-container {
-    height: 100%;
-  }
-  
-  mat-sidenav {
-    width: 250px;
-  }
-  
-  .custom-sidenav {
-    background-color: #3f51b5 !important; 
-    color: #ffffff !important; 
-  }
-
-  .custom-sidenav mat-list-item {
-    color: #ffffff !important; 
-  }
-
-  .textWhite{
-    color: #ffffff;
-  }
-mat-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+.toolbar-item-spacer {
+  flex: 1 1 auto;
 }
 
-.content {
-  padding: 16px;
+.app-container {
+  height: 90%;
+  margin: 0;
+}  
+
+.app-sidenav {
+  width: 230px;
 }
-  
+
+.mat-drawer-content{
+  padding: 0% 2%;
+}
+

@@ -1,7 +1,13 @@
-<div id="contenedor">
+<div class="title">
   <h2>Productos</h2>
   <button mat-raised-button color="primary"> Agregar nuevo producto</button>
-
-
 </div>
-  
+
+<div class="list-items">
+  <app-table  
+  [tableData]="listProducts"
+  [tableColumns] = "tableColumns"
+  (update)="onUpdateProduct($event)"
+  (delete)="onDeleteProduct($event)">
+  </app-table>
+</div>
