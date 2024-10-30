@@ -1,34 +1,38 @@
--- Crear usuario para todas las bases de datos
-CREATE USER myappaks WITH ENCRYPTED PASSWORD 'josecruz06';
+-- =======================================
+-- Validación y Creación del Usuario
+-- =======================================
+DO
+$$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'myappaks') THEN
+        CREATE ROLE myappaks WITH LOGIN PASSWORD 'josecruz06';
+    END IF;
+END
+$$;
 
--- Crear base de datos para el servicio de autenticación (Auth Service)
-CREATE DATABASE authdb;
--- Otorgar privilegios a myappaks sobre authdb
-GRANT ALL PRIVILEGES ON DATABASE authdb TO myappaks;
+-- =======================================
+-- Creación de la Base de Datos y Asignación de Privilegios
+-- =======================================
+--DO
+--$$
+--BEGIN
+--    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'appdb') THEN
+--        CREATE DATABASE appdb;
+--        GRANT ALL PRIVILEGES ON DATABASE appdb TO myappaks;
+--    END IF;
+--END
+--$$;
 
--- Crear base de datos para el servicio de productos (Product Service)
-CREATE DATABASE productdb;
--- Otorgar privilegios a myappaks sobre productdb
-GRANT ALL PRIVILEGES ON DATABASE productdb TO myappaks;
+-- =======================================
+-- Configuración de Tablas en appdb
+-- =======================================
+CREATE DATABASE appdb;
+GRANT ALL PRIVILEGES ON DATABASE appdb TO myappaks;
 
--- Crear base de datos para el servicio de órdenes (Order Service)
-CREATE DATABASE orderdb;
--- Otorgar privilegios a myappaks sobre orderdb
-GRANT ALL PRIVILEGES ON DATABASE orderdb TO myappaks;
+\connect appdb;
 
--- Crear base de datos para el servicio de notificaciones (Notification Service)
-CREATE DATABASE notificationdb;
--- Otorgar privilegios a myappaks sobre notificationdb
-GRANT ALL PRIVILEGES ON DATABASE notificationdb TO myappaks;
-
-
--- ===============================
--- Configuraciones para authdb
--- ===============================
-\connect authdb;
-
--- Tabla para los usuarios del sistema de autenticación
-CREATE TABLE users (
+-- Tabla para usuarios del sistema de autenticación
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -36,13 +40,8 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ===============================
--- Configuraciones para productdb
--- ===============================
-\connect productdb;
-
--- Tabla de productos para el servicio de productos
-CREATE TABLE products (
+-- Tabla para productos
+CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -51,29 +50,19 @@ CREATE TABLE products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ===============================
--- Configuraciones para orderdb
--- ===============================
-\connect orderdb;
-
--- Tabla de órdenes para el servicio de órdenes
-CREATE TABLE orders (
+-- Tabla de órdenes
+CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     total_price NUMERIC(10, 2) NOT NULL,
-    status VARCHAR(50) DEFAULT 'Pendiente',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    --FOREIGN KEY (product_id) REFERENCES productdb.products(id) ON DELETE CASCADE
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- ===============================
--- Configuraciones para notificationdb
--- ===============================
-\connect notificationdb;
-
--- Tabla para el servicio de notificaciones
-CREATE TABLE notifications (
+-- Tabla de notificaciones
+CREATE TABLE IF NOT EXISTS notifications (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     message TEXT NOT NULL,
