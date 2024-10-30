@@ -6,54 +6,19 @@ services:
     ports:
       - "4200:4200"
     depends_on:
-      - auth_service
-      - product_service
-      - order_service
-      - notification_service
+      - back_service
     networks:
       - microservices-network
 
-  # Auth Service
-  auth_service:
-    build: ./auth_service
-    ports:
-      - "5004:5000"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgresql://myappaks:josecruz06@db:5432/authdb
-    networks:
-      - microservices-network
-
-  # Product Service
-  product_service:
-    build: ./product_service
+  # Backend Service
+  back_service:
+    build: ./back_service
     ports:
       - "5001:5001"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://myappaks:josecruz06@db:5432/productdb
-    networks:
-      - microservices-network
-
-  # Order Service
-  order_service:
-    build: ./order_service
-    ports:
-      - "5002:5002"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgresql://myappaks:josecruz06@db:5432/orderdb
-    networks:
-      - microservices-network
-
-  # Notification Service
-  notification_service:
-    build: ./notification_service
-    ports:
-      - "5003:5003"
+      - DATABASE_URL=postgresql://myappaks:josecruz06@db:5432/appdb
     networks:
       - microservices-network
 

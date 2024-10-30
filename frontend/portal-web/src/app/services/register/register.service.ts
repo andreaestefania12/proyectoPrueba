@@ -8,7 +8,7 @@ import { Usuario } from 'src/app/models/user';
 })
 export class RegisterService {
 
-  private apiUrl = "http://localhost:5004/";
+  private apiUrl = "http://localhost:5001/";
 
   constructor(private http: HttpClient) { }
 
