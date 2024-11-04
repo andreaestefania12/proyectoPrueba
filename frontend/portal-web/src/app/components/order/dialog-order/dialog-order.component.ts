@@ -71,7 +71,7 @@ export class DialogOrderComponent implements OnInit {
   }
 
   save(): void {
-    if (this.orderForm.valid) {
+    if (this.orderForm.valid || this.isEditMode) {
       const result = {
         ...this.orderForm.value,
         id: this.isEditMode ? this.data.id : null,
