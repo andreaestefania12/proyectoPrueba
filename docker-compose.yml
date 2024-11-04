@@ -1,40 +1,22 @@
-version: '3'
+version: '3.8'
 services:
-  # Frontend Service
-  frontend:
-    build: ./frontend
-    ports:
-      - "4200:4200"
-    depends_on:
-      - back_service
-    networks:
-      - microservices-network
-
-  # Backend Service
-  back_service:
-    build: ./back_service
+  app:
+    build: .
     ports:
       - "5001:5001"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://myappaks:josecruz06@db:5432/appdb
-    networks:
-      - microservices-network
+      FLASK_ENV: development
 
-  # Base de Datos Postgres
   db:
     image: postgres:13
     environment:
       POSTGRES_USER: myappaks
       POSTGRES_PASSWORD: josecruz06
+      POSTGRES_DB: appdb
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/
-    ports:
-      - "5432:5432"
-    networks:
-      - microservices-network
+      - postgres_data:/var/lib/postgresql/data
 
-networks:
-  microservices-network:
-    driver: bridge
+volumes:
+  postgres_data:

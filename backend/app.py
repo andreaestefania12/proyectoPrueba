@@ -1,11 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 import logging
+import os
 
 # Inicializar la app y habilitar CORS
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static') 
 CORS(app)
 
 # Configuración de la base de datos
@@ -163,9 +164,14 @@ def add_product():
         price=data['price'],
         stock=data['stock']
     )
-    db.session.add(new_product)
-    db.session.commit()
-    return jsonify({"message": "Producto agregado exitosamente"}), 201
+    existing_product = Product.query.filter_by(name=new_product.name).first()
+    if not existing_product:
+        db.session.add(new_product)
+        db.session.commit()
+        return jsonify({"message": "Producto agregado exitosamente"}), 201
+    else:
+        return jsonify({"message": "El nombre del producto ya existe"}), 409
+    
 
 # Ruta para actualizar un producto existente
 @app.route('/products/<int:id>', methods=['PUT'])
@@ -177,9 +183,12 @@ def update_product(id):
     product.description = data.get('description', product.description)
     product.price = data.get('price', product.price)
     product.stock = data.get('stock', product.stock)
-
-    db.session.commit()
-    return jsonify({"message": "Producto actualizado exitosamente"})
+    existing_product = Product.query.filter_by(name=product.name).first()
+    if not existing_product:
+        db.session.commit()
+        return jsonify({"message": "Producto actualizado exitosamente"})
+    else:
+        return jsonify({"message": "El nombre del producto ya existe"}), 409
 
 # Ruta para eliminar un producto
 @app.route('/products/<int:id>', methods=['DELETE'])
@@ -231,12 +240,22 @@ def get_order(id):
 @app.route('/orders', methods=['POST'])
 def add_order():
     data = request.json
+
+    # Validamos si existe el producto
+    product = Product.query.get(data['product_id'])
+    if not product:
+        return jsonify({"message": "Producto no encontrado"}), 404
+    if product.stock < data['quantity']:
+        return jsonify({"message": "Stock insuficiente"}), 400
+
     new_order = Order(
         product_id=data['product_id'],
         quantity=data['quantity'],
         total_price=data['total_price'],
         status='Pendiente'  # Status inicial de la orden
     )
+
+    product.stock -= data['quantity']
     db.session.add(new_order)
     db.session.commit()
     return jsonify({"message": "Orden creada exitosamente"}), 201
@@ -262,6 +281,15 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     return jsonify({"message": "Orden eliminada exitosamente"})
+
+# Ruta para servir la aplicación Angular
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_frontend(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 # Iniciar la aplicación
 if __name__ == '__main__':

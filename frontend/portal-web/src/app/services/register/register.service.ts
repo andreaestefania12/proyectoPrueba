@@ -8,12 +8,10 @@ import { Usuario } from 'src/app/models/user';
 })
 export class RegisterService {
 
-  private apiUrl = "http://localhost:5001/";
-
   constructor(private http: HttpClient) { }
 
   // función para enviar la creación del nuevo usuario
   public register(user: Usuario): Observable<HttpResponse<any>> {
-    return this.http.post<any>(`${this.apiUrl}register`, user, { observe: 'response' });
+    return this.http.post<any>(`/register`, user, { observe: 'response' });
   }
 }

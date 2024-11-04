@@ -13,21 +13,21 @@ $$;
 -- =======================================
 -- Creación de la Base de Datos y Asignación de Privilegios
 -- =======================================
---DO
---$$
---BEGIN
---    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'appdb') THEN
---        CREATE DATABASE appdb;
---        GRANT ALL PRIVILEGES ON DATABASE appdb TO myappaks;
---    END IF;
---END
---$$;
+DO
+$$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_database WHERE datname = 'appdb') THEN
+        CREATE DATABASE appdb;
+        GRANT ALL PRIVILEGES ON DATABASE appdb TO myappaks;
+    END IF;
+END
+$$;
 
 -- =======================================
 -- Configuración de Tablas en appdb
 -- =======================================
-CREATE DATABASE appdb;
-GRANT ALL PRIVILEGES ON DATABASE appdb TO myappaks;
+--CREATE DATABASE appdb;
+--GRANT ALL PRIVILEGES ON DATABASE appdb TO myappaks;
 
 \connect appdb;
 

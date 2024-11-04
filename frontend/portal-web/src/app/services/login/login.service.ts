@@ -9,14 +9,12 @@ import { Usuario } from 'src/app/models/user';
 })
 export class LoginService {
 
-  private apiUrl = "http://localhost:5001/";
-  
   constructor(private http: HttpClient, private router: Router) { }
 
   // Función para enviar la solicitud post de login
   public login(user: Usuario): Observable<HttpResponse<any>> {
     const data = {username: user.username, password: user.password }
-    return this.http.post<any>(`${this.apiUrl}login`, data, { observe: 'response' })
+    return this.http.post<any>(`/login`, data, { observe: 'response' })
     .pipe(
       tap((response: HttpResponse<any>) => {
         // generamos un token en el caso de que sea exitoso
