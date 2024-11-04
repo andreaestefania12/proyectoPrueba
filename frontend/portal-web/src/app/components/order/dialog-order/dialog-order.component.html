@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>{{ data.title }} </h2>
+
+<mat-dialog-content>
+  <form [formGroup]="orderForm" class="form-container">
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Producto</mat-label>
+      <mat-select formControlName="product_id">
+        <mat-option *ngFor="let product of products" [value]="product.id">
+          {{ product.name }} (Disponible: {{ product.stock }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="selectedProduct">
+      <p>Cantidad disponible: {{ selectedProduct?.stock }}</p>
+    </div>
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Cantidad</mat-label>
+      <input 
+        matInput 
+        type="number" 
+        formControlName="quantity" 
+        min="1" 
+        [max]="selectedProduct?.stock || 0" 
+        [attr.max]="selectedProduct?.stock || 0">
+      <mat-error *ngIf="orderForm.get('quantity')?.hasError('max')">
+        La cantidad no puede ser mayor que {{ selectedProduct?.stock }}.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Precio Total</mat-label>
+      <input matInput type="number" formControlName="total_price">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isEditMode" appearance="fill" class="form-field">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Pendiente">Pendiente</mat-option>
+        <mat-option value="Completada">Completada</mat-option>
+        <mat-option value="Cancelada">Cancelada</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-button color="primary" (click)="save()">Guardar</button>
+</mat-dialog-actions>

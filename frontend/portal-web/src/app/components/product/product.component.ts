@@ -7,6 +7,7 @@ import { DialogComponent } from '../shared/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DialogPorductComponent } from './dialog-porduct/dialog-porduct.component';
 
 @Component({
   selector: 'app-product',
@@ -51,17 +52,59 @@ export class ProductComponent implements OnInit{
     )
   }
 
-  onUpdateProduct(id: any): void {
-    console.log('Updating product with id:', id);
+  // Función para agregar un nuevo producto, abre el dialog y luego guarda la información
+  onCreateProduct(): void {
+    const dialogRef = this.dialog.open(DialogPorductComponent, {
+      width: '30%',
+      data: { title:'Agregar nuevo producto', name: '', description: '', price: 0 , stock: null }
+    });
 
-   
-    // this.productsService.updateProduct(id).subscribe(
-    //   (response) => {
-    //     console.log('Product updated:', response);
-    //     this.getProducts(); // Refresh the product list after update
-    //   },
-    //   (error) => console.error('Error updating product:', error)
-    // );
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.productsService.createProduct(result).subscribe({
+          next: 
+          (response) => {
+            if(response.status === 201){
+              this.getProducts(); 
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.snackBar.open(error.error.message, 'X', {
+              duration: 6000,  
+              horizontalPosition: 'center',  
+              verticalPosition: 'top'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  onUpdateProduct(element: any): void {
+    const dialogRef = this.dialog.open(DialogPorductComponent, {
+      width: '30%',
+      data: { title:'Editar producto', id: element.id, name: element.name, description: element.description, price: element.price , stock: element.stock }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.productsService.updateProduct(result).subscribe({
+          next: 
+          (response) => {
+            if(response.status === 200){
+              this.getProducts(); 
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.snackBar.open(error.error.message, 'X', {
+              duration: 6000,  
+              horizontalPosition: 'center',  
+              verticalPosition: 'top'
+            });
+          }
+        });
+      }
+    });
   }
 
   onDeleteProduct(id: any): void {

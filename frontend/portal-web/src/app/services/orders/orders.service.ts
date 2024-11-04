@@ -17,6 +17,16 @@ export class OrdersService {
     return this.http.get<Orden[]>(`${this.apiUrl}orders`);
   }
 
+  // Crear nueva orden
+  public createOrder(orden: Orden): Observable<HttpResponse<any>>{
+    return this.http.post<any>(`${this.apiUrl}orders`, orden, { observe: 'response' });
+  }
+
+  // Actualizar orden
+  public updateOrder(orden: Orden): Observable<HttpResponse<any>>{
+    return this.http.put<any>(`${this.apiUrl}orders/${orden.id}`, orden, { observe: 'response' });
+  }
+
   // Eliminar una orden
   public deleteOrder(id: any): Observable<HttpResponse<any>>{
     return this.http.delete<any>(`${this.apiUrl}orders/${id}`, { observe: 'response' });

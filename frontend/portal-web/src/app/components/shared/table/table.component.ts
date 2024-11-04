@@ -56,8 +56,8 @@ export class TableComponent implements OnInit, AfterViewInit{
     this.pageIndex = event.pageIndex;
   }
 
-  onUpdate(id: any): void {
-    this.update.emit(id);
+  onUpdate(element: any): void {
+    this.update.emit(element);
   }
 
   onDelete(id: any): void {

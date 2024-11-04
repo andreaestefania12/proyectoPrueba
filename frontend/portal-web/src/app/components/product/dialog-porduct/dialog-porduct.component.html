@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{ data.title }} </h2>
+<mat-dialog-content>
+  <form [formGroup]="productForm" class="form-container">
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Descripción</mat-label>
+      <input matInput formControlName="description">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" formControlName="price" min="0">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Cantidad</mat-label>
+      <input matInput type="number" formControlName="stock" min="0">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-button color="primary" (click)="save()">Guardar</button>
+</mat-dialog-actions>

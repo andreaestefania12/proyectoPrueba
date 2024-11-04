@@ -14,6 +14,8 @@ import { RouterModule } from '@angular/router';
 import { TableComponent } from './components/shared/table/table.component';
 import { OrderComponent } from './components/order/order.component';
 import { DialogComponent } from './components/shared/dialog/dialog.component';
+import { DialogPorductComponent } from './components/product/dialog-porduct/dialog-porduct.component';
+import { DialogOrderComponent } from './components/order/dialog-order/dialog-order.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { DialogComponent } from './components/shared/dialog/dialog.component';
     TableComponent,
     OrderComponent,
     DialogComponent,
+    DialogPorductComponent,
+    DialogOrderComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

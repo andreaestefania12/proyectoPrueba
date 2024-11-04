@@ -1,12 +1,13 @@
 <div class="title">
     <h2>Ordenes</h2>
-    <button mat-raised-button color="primary"> Agregar nuevo orden</button>
+    <button mat-raised-button color="primary" (click)="onCreateOrder()"> Agregar nuevo orden</button>
   </div>
   
   <div class="list-items">
     <app-table  
     [tableData]="listOrders"
     [tableColumns]="tableColumns"
+    (update)="onUpdateOrder($event)"
     (delete)="onDeleteOrder($event)">
     </app-table>
   </div>
